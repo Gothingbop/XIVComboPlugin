@@ -557,6 +557,23 @@ namespace XIVComboPlugin
                         return MCH.Scattergun;
                     return MCH.SpreadShot;
                 }
+            
+            // Replace cooldown weapon skills with lowest cooldown skill
+            if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistSingleButtonWeaponSkills))
+            {
+                if (actionID == MCH.Drill)
+                {
+                    RecastInfo[] recastInfo =
+                    [
+                        GetRecastInfo(MCH.Drill), 
+                        GetRecastInfo(MCH.AirAnchor), 
+                        GetRecastInfo(MCH.ChainSaw)
+                    ];
+                    Array.Sort(recastInfo, (x,y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
+                    return recastInfo[0].ActionId;
+                }
+            }
+
 
             // BLACK MAGE
 
@@ -903,6 +920,28 @@ namespace XIVComboPlugin
                 if (buffs[i].StatusId == needle)
                     return true;
             return false;
-        }        
+        }
+        
+        private struct RecastInfo(uint actionId, float recastTime, float recastRemaining, uint charges)
+        {
+            public uint ActionId = actionId;
+            public float RecastTime = recastTime;
+            public float RecastRemaining = recastRemaining;
+            public uint Charges = charges;
+        }
+        
+        static unsafe RecastInfo GetRecastInfo(uint actionID)
+        {
+            var actionManager = ActionManager.Instance();
+            var recast = actionManager->GetRecastTime(ActionType.Action, actionID);
+            var recastElapsed =
+                actionManager->IsRecastTimerActive(ActionType.Action, actionID) switch
+                {
+                    true => actionManager->GetRecastTimeElapsed(ActionType.Action, actionID),
+                    false => recast
+                };
+                
+            return new RecastInfo(actionID, recast, recast-recastElapsed, 0);
+        }
     }
 }

@@ -106,6 +106,9 @@ namespace XIVComboPlugin
 
         [CustomComboInfo("Heat Blast when overheated", "Replace Hypercharge with Heat Blast when overheated", 31)]
         MachinistOverheatFeature = 1L << 47,
+        
+        [CustomComboInfo("Single button cooldown weapon skills", "Replace cooldown weapon skills with lowest cooldown skill", 31)]
+        MachinistSingleButtonWeaponSkills = 3L << 1,
 
         // BLACK MAGE
         [CustomComboInfo("Enochian Stance Switcher", "Change Fire 4 and Blizzard 4 to the appropriate element depending on stance, as well as Flare and Freeze", 25)]

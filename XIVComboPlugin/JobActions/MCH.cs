@@ -13,6 +13,9 @@
             HeatBlast = 7410,
             SpreadShot = 2870,
             AutoCrossbow = 16497,
-            Scattergun = 25786;
+            Scattergun = 25786,
+            Drill = 16498,
+            ChainSaw = 25788,
+            AirAnchor = 16500;
     }
 }
