@@ -16,6 +16,8 @@
             Scattergun = 25786,
             Drill = 16498,
             ChainSaw = 25788,
+            GaussRound = 2874,
+            Ricochet = 2890, 
             AirAnchor = 16500;
     }
 }

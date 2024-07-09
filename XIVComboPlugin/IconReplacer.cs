@@ -574,6 +574,21 @@ namespace XIVComboPlugin
                 }
             }
 
+            // Replace off global cooldown skills with the skill that has the greatest number of charges
+            // TODO: Ensure it works for Double Check / Checkmate
+            if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistOGCDSingleButton))
+            {
+                if (actionID == MCH.GaussRound)
+                {
+                    RecastInfo[] recastInfo =
+                    [
+                        GetRecastInfo(MCH.GaussRound), 
+                        GetRecastInfo(MCH.Ricochet)
+                    ];
+                    Array.Sort(recastInfo, (x,y) => y.Charges.CompareTo(x.Charges));
+                    return recastInfo[0].ActionId;
+                }
+            }
 
             // BLACK MAGE
 
@@ -940,8 +955,9 @@ namespace XIVComboPlugin
                     true => actionManager->GetRecastTimeElapsed(ActionType.Action, actionID),
                     false => recast
                 };
+            var charges = actionManager->GetCurrentCharges(actionID);
                 
-            return new RecastInfo(actionID, recast, recast-recastElapsed, 0);
+            return new RecastInfo(actionID, recast, recast-recastElapsed, charges);
         }
     }
 }
