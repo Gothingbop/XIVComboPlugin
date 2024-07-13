@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Dalamud.Game;
 using Dalamud.Hooking;
@@ -559,6 +560,7 @@ namespace XIVComboPlugin
                 }
             
             // Replace cooldown weapon skills with lowest cooldown skill
+            // TODO: Make sure it works with multiple drill charges
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistSingleButtonWeaponSkills))
             {
                 if (actionID == MCH.Drill)
@@ -575,18 +577,31 @@ namespace XIVComboPlugin
             }
 
             // Replace off global cooldown skills with the skill that has the greatest number of charges
-            // TODO: Ensure it works for Double Check / Checkmate
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistOGCDSingleButton))
             {
-                if (actionID == MCH.GaussRound)
+                HashSet<uint> skills = [ MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate ];
+                if (skills.Contains(actionID))
                 {
-                    RecastInfo[] recastInfo =
-                    [
-                        GetRecastInfo(MCH.GaussRound), 
-                        GetRecastInfo(MCH.Ricochet)
-                    ];
-                    Array.Sort(recastInfo, (x,y) => y.Charges.CompareTo(x.Charges));
-                    return recastInfo[0].ActionId;
+                    if (level < 92)
+                    {
+                        RecastInfo[] recastInfo =
+                        [
+                            GetRecastInfo(MCH.GaussRound),
+                            GetRecastInfo(MCH.Ricochet)
+                        ];
+                        Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+                        return recastInfo[0].ActionId;
+                    }
+                    else
+                    {
+                        RecastInfo[] recastInfo =
+                        [
+                            GetRecastInfo(MCH.DoubleCheck),
+                            GetRecastInfo(MCH.Checkmate)
+                        ];
+                        Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+                        return recastInfo[0].ActionId;
+                    }
                 }
             }
 

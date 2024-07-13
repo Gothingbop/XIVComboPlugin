@@ -109,7 +109,7 @@ namespace XIVComboPlugin
         [CustomComboInfo("Single button cooldown weapon skills", "Replace cooldown weapon skills with lowest cooldown skill", 31)]
         MachinistSingleButtonWeaponSkills = 1L << 30,
         
-        [CustomComboInfo("Single button OGCD (Double Check / Check Mate)", "Combines Double Check and Check mate into a single button", 31)]
+        [CustomComboInfo("Single button OGCD (Double Check / Checkmate)", "Combines Double Check and Checkmate into a single button", 31)]
         MachinistOGCDSingleButton = 1L << 31,
 
         // BLACK MAGE
