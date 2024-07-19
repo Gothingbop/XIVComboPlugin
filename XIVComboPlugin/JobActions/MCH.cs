@@ -21,6 +21,10 @@
             AirAnchor = 16500,
             DoubleCheck = 36979,
             Checkmate = 36980,
-            HotShot = 2872;
+            HotShot = 2872, 
+            Excavator = 36981;
+        
+        public const ushort
+            BuffExcavatorReady = 3865;
     }
 }
