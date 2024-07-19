@@ -20,6 +20,7 @@
             Ricochet = 2890,
             AirAnchor = 16500,
             DoubleCheck = 36979,
-            Checkmate = 36980;
+            Checkmate = 36980,
+            HotShot = 2872;
     }
 }

@@ -511,7 +511,7 @@ namespace XIVComboPlugin
             // Or with Heat Blast when overheated.
             // For some reason the shots use their unheated IDs as combo moves
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistMainCombo))
-                if (actionID == MCH.CleanShot || actionID == MCH.HeatedCleanShot)
+                if (actionID is MCH.CleanShot or MCH.HeatedCleanShot)
                 {
                     if (comboTime > 0)
                     {
@@ -568,7 +568,7 @@ namespace XIVComboPlugin
                     RecastInfo[] recastInfo =
                     [
                         GetRecastInfo(MCH.Drill), 
-                        GetRecastInfo(MCH.AirAnchor), 
+                        GetRecastInfo(level < 76 ? MCH.HotShot : MCH.AirAnchor), 
                         GetRecastInfo(MCH.ChainSaw)
                     ];
                     Array.Sort(recastInfo, (x,y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
@@ -582,26 +582,26 @@ namespace XIVComboPlugin
                 HashSet<uint> skills = [ MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate ];
                 if (skills.Contains(actionID))
                 {
+                    RecastInfo[] recastInfo;
                     if (level < 92)
                     {
-                        RecastInfo[] recastInfo =
+                        recastInfo =
                         [
                             GetRecastInfo(MCH.GaussRound),
                             GetRecastInfo(MCH.Ricochet)
                         ];
-                        Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
-                        return recastInfo[0].ActionId;
+                        
                     }
                     else
                     {
-                        RecastInfo[] recastInfo =
+                        recastInfo =
                         [
                             GetRecastInfo(MCH.DoubleCheck),
                             GetRecastInfo(MCH.Checkmate)
                         ];
-                        Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
-                        return recastInfo[0].ActionId;
                     }
+                    Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+                    return recastInfo[0].ActionId;
                 }
             }
 
