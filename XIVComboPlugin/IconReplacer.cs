@@ -560,7 +560,6 @@ namespace XIVComboPlugin
                 }
             
             // Replace cooldown weapon skills with lowest cooldown skill
-            // TODO: Make sure it works with multiple drill charges
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistSingleButtonWeaponSkills))
             {
                 if (actionID == MCH.Drill)
@@ -964,15 +963,11 @@ namespace XIVComboPlugin
         {
             var actionManager = ActionManager.Instance();
             var recast = actionManager->GetRecastTime(ActionType.Action, actionID);
-            var recastElapsed =
-                actionManager->IsRecastTimerActive(ActionType.Action, actionID) switch
-                {
-                    true => actionManager->GetRecastTimeElapsed(ActionType.Action, actionID),
-                    false => recast
-                };
+            var recastElapsed = actionManager->GetRecastTimeElapsed(ActionType.Action, actionID);
             var charges = actionManager->GetCurrentCharges(actionID);
+            var chargeRecast = recast / charges;
                 
-            return new RecastInfo(actionID, recast, recast-recastElapsed, charges);
+            return new RecastInfo(actionID, recast, chargeRecast-recastElapsed, charges);
         }
     }
 }
