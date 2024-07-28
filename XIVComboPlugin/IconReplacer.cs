@@ -564,12 +564,10 @@ namespace XIVComboPlugin
             {
                 if (actionID == MCH.Drill)
                 {
-                    List<RecastInfo> recastInfo =
-                    [
-                        GetRecastInfo(MCH.Drill), 
-                        GetRecastInfo(level < 76 ? MCH.HotShot : MCH.AirAnchor), 
-                        GetRecastInfo(MCH.ChainSaw)
-                    ];
+                    List<RecastInfo> recastInfo = [];
+                    if (level >= 4) recastInfo.Add(GetRecastInfo(level < 76 ? MCH.HotShot : MCH.AirAnchor));
+                    if (level >= 54) recastInfo.Add(GetRecastInfo(MCH.Drill));
+                    if (level >= 90) recastInfo.Add(GetRecastInfo(MCH.ChainSaw));
                     if (SearchBuffArray(MCH.BuffExcavatorReady)) recastInfo.Add(GetRecastInfo(MCH.Excavator));
                     
                     recastInfo.Sort((x,y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
