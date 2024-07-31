@@ -253,13 +253,13 @@ namespace XIVComboPlugin
                     return PLD.TotalEclipse;
                 }
 
-            // Replace Requiescat with Confiteor when under the effect of Requiescat
+            // Replace Holy Spirit/Circle with Confiteor when under the effect of Confiteor Ready
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.PaladinRequiescatCombo))
-                if (actionID == PLD.Requiescat)
+                if (actionID is PLD.HolySpirit or PLD.HolyCircle)
                 {
-                    if (SearchBuffArray(PLD.BuffRequiescat) && level >= 80)
+                    if (SearchBuffArray(PLD.BuffConfiteorReady) && level >= 80)
                         return iconHook.Original(self, PLD.Confiteor);
-                    return PLD.Requiescat;
+                    return actionID;
                 }
 
             // WARRIOR
@@ -961,10 +961,10 @@ namespace XIVComboPlugin
         
         static unsafe RecastInfo GetRecastInfo(uint actionID)
         {
-            var actionManager = ActionManager.Instance();
-            var recast = actionManager->GetRecastTime(ActionType.Action, actionID);
-            var recastElapsed = actionManager->GetRecastTimeElapsed(ActionType.Action, actionID);
-            var charges = actionManager->GetCurrentCharges(actionID);
+            var actionManager = *ActionManager.Instance();
+            var recast = actionManager.GetRecastTime(ActionType.Action, actionID);
+            var recastElapsed = actionManager.GetRecastTimeElapsed(ActionType.Action, actionID);
+            var charges = actionManager.GetCurrentCharges(actionID);
             var chargeRecast = recast / charges;
                 
             return new RecastInfo(actionID, recast, chargeRecast-recastElapsed, charges);
