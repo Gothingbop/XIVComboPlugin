@@ -259,6 +259,9 @@ namespace XIVComboPlugin
                 {
                     if (SearchBuffArray(PLD.BuffConfiteorReady) && level >= 80)
                         return iconHook.Original(self, PLD.Confiteor);
+                    if (SearchBuffArray(PLD.BuffRequiescat) && level >= 90)
+                        return iconHook.Original(self, PLD.Confiteor);
+
                     return actionID;
                 }
 
