@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
 namespace XIVCombo.Combos;
@@ -64,6 +64,7 @@ internal static class MCH
     {
         public const byte
             SlugShot = 2,
+            HotShot = 4, 
             GaussRound = 15,
             CleanShot = 26,
             Hypercharge = 30,
@@ -107,6 +108,7 @@ internal class MachinistCleanShot : CustomCombo
                     // Heated
                     return OriginalHook(MCH.SlugShot);
             }
+
             // Heated
             return OriginalHook(MCH.SplitShot);
         }
@@ -135,7 +137,7 @@ internal class MachinistSpreadShot : CustomCombo
 
 internal class MachinistHyperchargeCombo : CustomCombo
 {
-    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MachinistHypercomboFeature;
+    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistHypercomboFeature;
 
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
@@ -148,5 +150,64 @@ internal class MachinistHyperchargeCombo : CustomCombo
         }
 
         return actionID;
+    }
+}
+
+internal class MachinistCooldownSkillsCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistCooldownSkillsFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionId != MCH.Drill) return actionId;
+
+        List<RecastInfo> recastInfo = [];
+        if (level >= MCH.Levels.HotShot) recastInfo.Add(GetRecastInfo(level < MCH.Levels.AirAnchor ? MCH.HotShot : MCH.AirAnchor));
+        if (level >= MCH.Levels.Drill) recastInfo.Add(GetRecastInfo(MCH.Drill));
+        if (level >= MCH.Levels.Chainsaw) recastInfo.Add(GetRecastInfo(MCH.Chainsaw));
+        if (HasEffect(MCH.Buffs.ExcavatorReady)) recastInfo.Add(GetRecastInfo(MCH.Excavator));
+
+        recastInfo.Sort((x, y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
+        return recastInfo[0].ActionId;
+    }
+}
+
+internal class MachinistOffGGlobalSingleButtonCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistOffGGlobalSingleButtonFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        HashSet<uint> skills = [MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate];
+        if (!skills.Contains(actionId)) return actionId;
+
+        RecastInfo[] recastInfo;
+        if (level < MCH.Levels.CheckMate)
+        {
+            recastInfo =
+            [
+                GetRecastInfo(MCH.GaussRound),
+                GetRecastInfo(MCH.Ricochet)
+            ];
+        }
+        else
+        {
+            recastInfo =
+            [
+                GetRecastInfo(MCH.DoubleCheck),
+                GetRecastInfo(MCH.Checkmate)
+            ];
+        }
+
+        Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+        
+        var gauge = GetJobGauge<MCHGauge>();
+        if (!gauge.IsOverheated) return recastInfo[0].ActionId;
+        
+        var recastDetail = GetRecastGroupInfo(57);
+        var recastRemaining = recastDetail.Total - recastDetail.Elapsed;
+        if (recastRemaining < 0.5) return level < MCH.Levels.BlazingShot ? MCH.HeatBlast : MCH.BlazingShot;
+
+        return recastInfo[0].ActionId;
     }
 }

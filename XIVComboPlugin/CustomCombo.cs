@@ -5,9 +5,10 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Utility;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVCombo.Attributes;
+using Status = Dalamud.Game.ClientState.Statuses.Status;
 
 namespace XIVCombo.Combos;
 
@@ -426,5 +427,30 @@ internal abstract partial class CustomCombo
             return false;
 
         return true;
+    }
+    
+    protected struct RecastInfo(uint actionId, float recastTime, float recastRemaining, uint charges)
+    {
+        public uint ActionId = actionId;
+        public float RecastTime = recastTime;
+        public float RecastRemaining = recastRemaining;
+        public uint Charges = charges;
+    }
+    protected unsafe RecastInfo GetRecastInfo(uint actionId)
+    {
+        var actionManager = *ActionManager.Instance();
+        var recast = actionManager.GetRecastTime(ActionType.Action, actionId);
+        var recastElapsed = actionManager.GetRecastTimeElapsed(ActionType.Action, actionId);
+        var charges = actionManager.GetCurrentCharges(actionId);
+        var chargeRecast = recast / charges;
+
+        return new RecastInfo(actionId, recast, chargeRecast - recastElapsed, charges);
+    }
+    
+    protected unsafe RecastDetail GetRecastGroupInfo(int actionId)
+    {
+        var actionManager = *ActionManager.Instance();
+        var groupDetail = actionManager.GetRecastGroupDetail(actionId);
+        return *groupDetail;
     }
 }

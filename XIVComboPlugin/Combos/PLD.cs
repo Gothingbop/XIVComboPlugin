@@ -198,3 +198,28 @@ internal class PaladinRequiescat : PaladinCombo
         return actionID;
     }
 }
+
+
+
+internal class PaladinHolySpiritConfiteorCombo : PaladinCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.PaladinHolySpiritConfiteorFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionId is not (PLD.HolySpirit or PLD.HolyCircle)) return actionId;
+        
+        var original = OriginalHook(PLD.Confiteor);
+        
+        if (original != PLD.Confiteor)
+            return original;
+        
+        if (HasEffect(PLD.Buffs.ConfiteorReady) && level >= PLD.Levels.Confiteor)
+            return PLD.Confiteor;
+        
+        if (level >= PLD.Levels.Requiescat && HasEffect(PLD.Buffs.Requiescat))
+            return actionId;
+
+        return actionId;
+    }
+}

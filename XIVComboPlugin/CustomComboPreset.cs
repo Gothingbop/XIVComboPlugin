@@ -229,6 +229,16 @@ public enum CustomComboPreset
     [SectionCombo("Area of Effect")]
     [CustomComboInfo("Spread Shot Heat", "Replace Spread Shot with Auto Crossbow while overheated.", MCH.JobID)]
     MachinistSpreadShotFeature = 3102,
+    
+    [IconsCombo([MCH.Drill, MCH.AirAnchor, MCH.Chainsaw, MCH.Excavator, MCH.HotShot])]
+    [SectionCombo("My Custom")]
+    [CustomComboInfo("Single Button Cooldown Weapon Skills", "Combine cooldown weapon skills to a single button. Use whichever has the most charges and lowest cooldown.", MCH.JobID)]
+    MachinistCooldownSkillsFeature = 3103,
+    
+    [IconsCombo([MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate, MCH.HeatBlast, MCH.BlazingShot])]
+    [SectionCombo("My Custom")]
+    [CustomComboInfo("Single Button OGCD Skills", "Replace off global cooldown skills with the skill that has the greatest number of charges.", MCH.JobID)]
+    MachinistOffGGlobalSingleButtonFeature = 3104,
 
     #endregion
     // ====================================================================================
@@ -291,6 +301,11 @@ public enum CustomComboPreset
     [SectionCombo("Cooldowns")]
     [CustomComboInfo("Requiescat/Imperator Confiteor", "Replace Requiescat/Imperator with Confiteor and combo chain when available, and then with Holy Spirit if there are remaining charges.", PLD.JobID)]
     PaladinRequiescatConfiteorFeature = 1905,
+    
+    [IconsCombo([PLD.Requiescat, UTL.ArrowLeft, PLD.Confiteor, PLD.BladeOfFaith, PLD.BladeOfTruth, PLD.BladeOfValor, PLD.BladeOfHonor])]
+    [SectionCombo("My Custom")]
+    [CustomComboInfo("Holy Spirit/Circle Confiteor", "Replace Holy Spirit/Circle with Confiteor and combo chain when available.", PLD.JobID)]
+    PaladinHolySpiritConfiteorFeature = 1906,
 
     #endregion
     // ====================================================================================
