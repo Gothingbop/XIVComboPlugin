@@ -34,7 +34,9 @@ namespace XIVComboPlugin
 
         private unsafe delegate int* getArray(long* address);
 
-        public IconReplacer(ISigScanner scanner, IClientState clientState, IDataManager manager, XIVComboConfiguration configuration, IGameInteropProvider hookProvider, IJobGauges jobGauges, IPluginLog pluginLog)
+        public IconReplacer(ISigScanner scanner, IClientState clientState, IDataManager manager,
+            XIVComboConfiguration configuration, IGameInteropProvider hookProvider, IJobGauges jobGauges,
+            IPluginLog pluginLog)
         {
             HookProvider = hookProvider;
             Configuration = configuration;
@@ -54,8 +56,11 @@ namespace XIVComboPlugin
             PluginLog.Verbose("ComboTimer address {ComboTimer}", comboTimer);
             PluginLog.Verbose("LastComboMove address {LastComboMove}", lastComboMove);
 
-            iconHook = HookProvider.HookFromAddress<OnGetIconDelegate>((nint)ActionManager.Addresses.GetAdjustedActionId.Value, GetIconDetour);
-            checkerHook = HookProvider.HookFromAddress<OnCheckIsIconReplaceableDelegate>(Address.IsIconReplaceable, CheckIsIconReplaceableDetour);
+            iconHook = HookProvider.HookFromAddress<OnGetIconDelegate>(
+                (nint)ActionManager.Addresses.GetAdjustedActionId.Value, GetIconDetour);
+            checkerHook =
+                HookProvider.HookFromAddress<OnCheckIsIconReplaceableDelegate>(Address.IsIconReplaceable,
+                    CheckIsIconReplaceableDetour);
             HookProvider = hookProvider;
         }
 
@@ -104,6 +109,7 @@ namespace XIVComboPlugin
                 SetupComboData();
                 return iconHook.Original(self, actionID);
             }
+
             if (comboTimer == IntPtr.Zero)
             {
                 SetupComboData();
@@ -136,7 +142,7 @@ namespace XIVComboPlugin
                         if (lastMove == DRG.SonicThrust && level >= 72)
                             return DRG.CTorment;
                     }
-                    
+
                     return iconHook.Original(self, DRG.DoomSpike);
                 }
 
@@ -156,6 +162,7 @@ namespace XIVComboPlugin
                                 return DRG.ChaosThrust;
                         }
                     }
+
                     if (SearchBuffArray(DRG.BuffFangAndClawReady) && level >= 56)
                         return DRG.FangAndClaw;
                     if (SearchBuffArray(DRG.BuffWheelingThrustReady) && level >= 58)
@@ -182,6 +189,7 @@ namespace XIVComboPlugin
                                 return DRG.FullThrust;
                         }
                     }
+
                     if (SearchBuffArray(DRG.BuffFangAndClawReady) && level >= 56)
                         return DRG.FangAndClaw;
                     if (SearchBuffArray(DRG.BuffWheelingThrustReady) && level >= 58)
@@ -406,7 +414,7 @@ namespace XIVComboPlugin
                         return SAM.OgiNamikiri;
                     if (JobGauges.Get<SAMGauge>().Kaeshi == Kaeshi.NAMIKIRI)
                         return SAM.KaeshiNamikiri;
-                        
+
                     return SAM.Ikishoten;
                 }
 
@@ -451,6 +459,7 @@ namespace XIVComboPlugin
                         if (lastMove == NIN.DeathBlossom && level >= 52)
                             return NIN.HakkeM;
                     }
+
                     return NIN.DeathBlossom;
                 }
 
@@ -467,6 +476,7 @@ namespace XIVComboPlugin
                         if (lastMove == GNB.BrutalShell && level >= 26)
                             return GNB.SolidBarrel;
                     }
+
                     return GNB.KeenEdge;
                 }
 
@@ -483,6 +493,7 @@ namespace XIVComboPlugin
                         if (SearchBuffArray(GNB.BuffReadyToGouge))
                             return GNB.EyeGouge;
                     }
+
                     return iconHook.Original(self, GNB.GnashingFang);
                 }
 
@@ -495,6 +506,7 @@ namespace XIVComboPlugin
                         if (SearchBuffArray(GNB.BuffReadyToBlast))
                             return GNB.Hypervelocity;
                     }
+
                     return GNB.BurstStrike;
                 }
 
@@ -561,7 +573,7 @@ namespace XIVComboPlugin
                         return MCH.Scattergun;
                     return MCH.SpreadShot;
                 }
-            
+
             // Replace cooldown weapon skills with lowest cooldown skill
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistSingleButtonWeaponSkills))
             {
@@ -572,8 +584,8 @@ namespace XIVComboPlugin
                     if (level >= 54) recastInfo.Add(GetRecastInfo(MCH.Drill));
                     if (level >= 90) recastInfo.Add(GetRecastInfo(MCH.ChainSaw));
                     if (SearchBuffArray(MCH.BuffExcavatorReady)) recastInfo.Add(GetRecastInfo(MCH.Excavator));
-                    
-                    recastInfo.Sort((x,y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
+
+                    recastInfo.Sort((x, y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
                     return recastInfo[0].ActionId;
                 }
             }
@@ -581,7 +593,7 @@ namespace XIVComboPlugin
             // Replace off global cooldown skills with the skill that has the greatest number of charges
             if (Configuration.ComboPresets.HasFlag(CustomComboPreset.MachinistOGCDSingleButton))
             {
-                HashSet<uint> skills = [ MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate ];
+                HashSet<uint> skills = [MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate];
                 if (skills.Contains(actionID))
                 {
                     RecastInfo[] recastInfo;
@@ -592,7 +604,6 @@ namespace XIVComboPlugin
                             GetRecastInfo(MCH.GaussRound),
                             GetRecastInfo(MCH.Ricochet)
                         ];
-                        
                     }
                     else
                     {
@@ -602,9 +613,20 @@ namespace XIVComboPlugin
                             GetRecastInfo(MCH.Checkmate)
                         ];
                     }
+
                     Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+                    if (JobGauges.Get<MCHGauge>().IsOverheated)
+                    {
+                        var recastDetail = GetRecastGroupInfo(57);
+                        var recastRemaining = recastDetail.Total - recastDetail.Elapsed;
+                        if (recastRemaining < 0.5) return level < 68 ? MCH.HeatBlast : MCH.BlazingShot;
+                    }
+
                     return recastInfo[0].ActionId;
                 }
+
+                // count += 1;
+                // PluginLog.Verbose($"{count}");
             }
 
             // BLACK MAGE
@@ -813,12 +835,13 @@ namespace XIVComboPlugin
             {
                 if (actionID == RDM.Veraero2)
                 {
-                    if (SearchBuffArray(RDM.BuffSwiftcast) || SearchBuffArray(RDM.BuffDualcast) || 
+                    if (SearchBuffArray(RDM.BuffSwiftcast) || SearchBuffArray(RDM.BuffDualcast) ||
                         SearchBuffArray(RDM.BuffAcceleration) || SearchBuffArray(RDM.BuffChainspell))
                     {
                         if (level >= 66) return RDM.Impact;
                         return RDM.Scatter;
                     }
+
                     return iconHook.Original(self, RDM.Veraero2);
                 }
 
@@ -830,6 +853,7 @@ namespace XIVComboPlugin
                         if (level >= 66) return RDM.Impact;
                         return RDM.Scatter;
                     }
+
                     return iconHook.Original(self, RDM.Verthunder2);
                 }
             }
@@ -869,6 +893,7 @@ namespace XIVComboPlugin
                     if (level < 62) return RDM.Jolt;
                     return RDM.Jolt2;
                 }
+
                 if (actionID == RDM.Verfire)
                 {
                     if (level >= 80 && (lastMove == RDM.Verflare || lastMove == RDM.Verholy)) return RDM.Scorch;
@@ -894,6 +919,7 @@ namespace XIVComboPlugin
                         if (lastMove == RPR.WaxingSlice && level >= RPR.Levels.InfernalSlice)
                             return RPR.InfernalSlice;
                     }
+
                     return RPR.Slice;
                 }
             }
@@ -953,7 +979,7 @@ namespace XIVComboPlugin
                     return true;
             return false;
         }
-        
+
         private struct RecastInfo(uint actionId, float recastTime, float recastRemaining, uint charges)
         {
             public uint ActionId = actionId;
@@ -961,7 +987,7 @@ namespace XIVComboPlugin
             public float RecastRemaining = recastRemaining;
             public uint Charges = charges;
         }
-        
+
         static unsafe RecastInfo GetRecastInfo(uint actionID)
         {
             var actionManager = *ActionManager.Instance();
@@ -969,8 +995,15 @@ namespace XIVComboPlugin
             var recastElapsed = actionManager.GetRecastTimeElapsed(ActionType.Action, actionID);
             var charges = actionManager.GetCurrentCharges(actionID);
             var chargeRecast = recast / charges;
-                
-            return new RecastInfo(actionID, recast, chargeRecast-recastElapsed, charges);
+
+            return new RecastInfo(actionID, recast, chargeRecast - recastElapsed, charges);
+        }
+
+        static unsafe RecastDetail GetRecastGroupInfo(int actionId)
+        {
+            var actionManager = *ActionManager.Instance();
+            var groupDetail = actionManager.GetRecastGroupDetail(actionId);
+            return *groupDetail;
         }
     }
 }

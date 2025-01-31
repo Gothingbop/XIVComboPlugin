@@ -22,7 +22,8 @@
             DoubleCheck = 36979,
             Checkmate = 36980,
             HotShot = 2872, 
-            Excavator = 36981;
+            Excavator = 36981, 
+            BlazingShot = 36978;
         
         public const ushort
             BuffExcavatorReady = 3865;
