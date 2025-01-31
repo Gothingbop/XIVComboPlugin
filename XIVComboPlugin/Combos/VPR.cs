@@ -215,3 +215,38 @@ internal class ViperDens : CustomCombo
         return actionID;
     }
 }
+
+internal class ViperVicewinderCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.ViperVicewinderFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionId is not VPR.Vicewinder) return actionId;
+        
+        if (HasEffect(VPR.Buffs.SwiftskinsVenom)) return VPR.TwinbloodBite;
+        if (HasEffect(VPR.Buffs.HuntersVenom)) return VPR.TwinfangBite;
+        if (CanUseAction(VPR.HuntersCoil)) return VPR.HuntersCoil;
+        if (CanUseAction(VPR.SwiftskinsCoil)) return VPR.SwiftskinsCoil;
+        
+        return actionId;
+    }
+}
+
+
+internal class ViperVicepitCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.ViperVicepitFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionId is not VPR.VicePit) return actionId;
+        
+        if (HasEffect(VPR.Buffs.FellskinsVenom)) return VPR.TwinbloodThresh;
+        if (HasEffect(VPR.Buffs.FellhuntersVenom)) return VPR.TwinfangThresh;
+        if (CanUseAction(VPR.HuntersDen)) return VPR.HuntersDen;
+        if (CanUseAction(VPR.SwiftskinsDen)) return VPR.SwiftskinsDen;
+        
+        return actionId;
+    }
+}

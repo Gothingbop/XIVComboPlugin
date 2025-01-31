@@ -485,6 +485,16 @@ public enum CustomComboPreset
     [IconsCombo([VPR.FirstGeneration, VPR.FirstLegacy, VPR.SecondGeneration, VPR.SecondLegacy, VPR.ThirdGeneration, VPR.ThirdLegacy, VPR.FourthGeneration, VPR.FourthLegacy, UTL.Blank])]
     [CustomComboInfo("Generation Legacy Feature", "Replace the Generation skills with their respective Legacies.", VPR.JobID)]
     ViperGenerationLegaciesFeature = 4105,
+    
+    [SectionCombo("My Custom")]
+    [IconsCombo([VPR.Vicewinder, VPR.HuntersCoil, VPR.TwinfangBite, VPR.TwinbloodBite, VPR.SwiftskinsCoil, VPR.TwinbloodBite, VPR.TwinfangBite])]
+    [CustomComboInfo("Vicewinder Combo", "Replace Vicewinder with the Coils and Bites that proceed it.", VPR.JobID)]
+    ViperVicewinderFeature = 4106,
+    
+    [SectionCombo("My Custom")]
+    [IconsCombo([VPR.VicePit, VPR.HuntersDen, VPR.TwinfangThresh, VPR.TwinbloodThresh, VPR.SwiftskinsDen, VPR.TwinbloodThresh, VPR.TwinfangThresh])]
+    [CustomComboInfo("Vicepit Combo", "Replace Vicepit with the Dens and Threshes that proceed it.", VPR.JobID)]
+    ViperVicepitFeature = 4107,
 
     #endregion
     // ====================================================================================
