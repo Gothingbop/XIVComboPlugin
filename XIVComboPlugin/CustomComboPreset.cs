@@ -495,6 +495,11 @@ public enum CustomComboPreset
     [IconsCombo([VPR.VicePit, VPR.HuntersDen, VPR.TwinfangThresh, VPR.TwinbloodThresh, VPR.SwiftskinsDen, VPR.TwinbloodThresh, VPR.TwinfangThresh])]
     [CustomComboInfo("Vicepit Combo", "Replace Vicepit with the Dens and Threshes that proceed it.", VPR.JobID)]
     ViperVicepitFeature = 4107,
+    
+    [SectionCombo("My Custom")]
+    [IconsCombo([VPR.UncoiledFury, VPR.UncoiledTwinfang, VPR.UncoiledTwinblood])]
+    [CustomComboInfo("Uncoiled Fury Combo", "Replace Uncoiled Fury with the followup OGCDs.", VPR.JobID)]
+    ViperUncoiledFeature = 4108,
 
     #endregion
     // ====================================================================================

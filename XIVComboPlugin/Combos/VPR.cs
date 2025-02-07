@@ -250,3 +250,19 @@ internal class ViperVicepitCombo : CustomCombo
         return actionId;
     }
 }
+
+internal class ViperUncoiledCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.ViperUncoiledFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (actionId is not VPR.UncoiledFury) return actionId;
+        if (level < VPR.Levels.UncoiledTwins) return actionId;
+        
+        if (HasEffect(VPR.Buffs.PoisedForTwinfang)) return VPR.UncoiledTwinfang;
+        if (HasEffect(VPR.Buffs.PoisedForTwinblood)) return VPR.UncoiledTwinblood;
+        
+        return actionId;
+    }
+}
