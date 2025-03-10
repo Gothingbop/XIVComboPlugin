@@ -64,7 +64,7 @@ internal static class MCH
     {
         public const byte
             SlugShot = 2,
-            HotShot = 4, 
+            HotShot = 4,
             GaussRound = 15,
             CleanShot = 26,
             Hypercharge = 30,
@@ -162,7 +162,8 @@ internal class MachinistCooldownSkillsCombo : CustomCombo
         if (actionId != MCH.Drill) return actionId;
 
         List<RecastInfo> recastInfo = [];
-        if (level >= MCH.Levels.HotShot) recastInfo.Add(GetRecastInfo(level < MCH.Levels.AirAnchor ? MCH.HotShot : MCH.AirAnchor));
+        if (level >= MCH.Levels.HotShot)
+            recastInfo.Add(GetRecastInfo(level < MCH.Levels.AirAnchor ? MCH.HotShot : MCH.AirAnchor));
         if (level >= MCH.Levels.Drill) recastInfo.Add(GetRecastInfo(MCH.Drill));
         if (level >= MCH.Levels.Chainsaw) recastInfo.Add(GetRecastInfo(MCH.Chainsaw));
         if (HasEffect(MCH.Buffs.ExcavatorReady)) recastInfo.Add(GetRecastInfo(MCH.Excavator));
@@ -181,33 +182,43 @@ internal class MachinistOffGGlobalSingleButtonCombo : CustomCombo
         HashSet<uint> skills = [MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate];
         if (!skills.Contains(actionId)) return actionId;
 
-        RecastInfo[] recastInfo;
-        if (level < MCH.Levels.CheckMate)
+
+        uint ogcdActionId;
+        if (level < MCH.Levels.Ricochet)
         {
-            recastInfo =
-            [
-                GetRecastInfo(MCH.GaussRound),
-                GetRecastInfo(MCH.Ricochet)
-            ];
+            ogcdActionId = MCH.GaussRound;
         }
         else
         {
-            recastInfo =
-            [
-                GetRecastInfo(MCH.DoubleCheck),
-                GetRecastInfo(MCH.Checkmate)
-            ];
+            RecastInfo[] recastInfo;
+            if (level < MCH.Levels.CheckMate)
+            {
+                recastInfo =
+                [
+                    GetRecastInfo(MCH.GaussRound),
+                    GetRecastInfo(MCH.Ricochet)
+                ];
+            }
+            else
+            {
+                recastInfo =
+                [
+                    GetRecastInfo(MCH.DoubleCheck),
+                    GetRecastInfo(MCH.Checkmate)
+                ];
+            }
+
+            Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+            ogcdActionId = recastInfo[0].ActionId;
         }
 
-        Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
-        
         var gauge = GetJobGauge<MCHGauge>();
-        if (!gauge.IsOverheated) return recastInfo[0].ActionId;
-        
+        if (!gauge.IsOverheated) return ogcdActionId;
+
         var recastDetail = GetRecastGroupInfo(57);
         var recastRemaining = recastDetail.Total - recastDetail.Elapsed;
         if (recastRemaining < 0.5) return level < MCH.Levels.BlazingShot ? MCH.HeatBlast : MCH.BlazingShot;
 
-        return recastInfo[0].ActionId;
+        return ogcdActionId;
     }
 }
