@@ -42,18 +42,18 @@ public sealed class XIVCombo : IDalamudPlugin
 		Service.ComboCache = new CustomComboCache();
 		Service.IconReplacer = new IconReplacer(gameInteropProvider);
 
-		this.configWindow = new(this);
-		this.oneTimeModal = new(this);
-		this.windowSystem = new("XIVCombo");
-		this.windowSystem.AddWindow(this.configWindow);
-		this.windowSystem.AddWindow(this.oneTimeModal);
+		configWindow = new(this);
+		oneTimeModal = new(this);
+		windowSystem = new("XIVCombo");
+		windowSystem.AddWindow(configWindow);
+		windowSystem.AddWindow(oneTimeModal);
 
-		Service.Interface.UiBuilder.OpenConfigUi += this.OnOpenConfigUi;
-		Service.Interface.UiBuilder.Draw += this.windowSystem.Draw;
+		Service.Interface.UiBuilder.OpenConfigUi += OnOpenConfigUi;
+		Service.Interface.UiBuilder.Draw += windowSystem.Draw;
 
-		if (Service.Configuration.OneTimePopUp) this.oneTimeModal.IsOpen = true;
+		if (Service.Configuration.OneTimePopUp) oneTimeModal.IsOpen = true;
 
-		Service.CommandManager.AddHandler(Command, new CommandInfo(this.OnCommand)
+		Service.CommandManager.AddHandler(Command, new CommandInfo(OnCommand)
 		{
 			HelpMessage = "Open the XIVCombo main interface.",
 			ShowInHelp = true,
@@ -67,8 +67,8 @@ public sealed class XIVCombo : IDalamudPlugin
 	{
 		Service.CommandManager.RemoveHandler(Command);
 
-		Service.Interface.UiBuilder.OpenConfigUi -= this.OnOpenConfigUi;
-		Service.Interface.UiBuilder.Draw -= this.windowSystem.Draw;
+		Service.Interface.UiBuilder.OpenConfigUi -= OnOpenConfigUi;
+		Service.Interface.UiBuilder.Draw -= windowSystem.Draw;
 
 		Service.IconReplacer?.Dispose();
 		Service.ComboCache?.Dispose();
@@ -85,7 +85,7 @@ public sealed class XIVCombo : IDalamudPlugin
 			Service.Configuration.CurrentJobTab = job;
 		}
 
-		this.configWindow.Toggle();
+		configWindow.Toggle();
 
 	}
 
@@ -185,7 +185,7 @@ public sealed class XIVCombo : IDalamudPlugin
 					Service.Configuration.CurrentJobTab = job;
 				}
 
-				this.configWindow.Toggle();
+				configWindow.Toggle();
 				break;
 		}
 
