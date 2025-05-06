@@ -85,6 +85,9 @@ internal sealed partial class IconReplacer : IDisposable
 
         try
         {
+            if (!Dalamud.Utility.ThreadSafety.IsMainThread)
+                return this.OriginalHook(actionID);
+            
             if (Service.ClientState.LocalPlayer == null)
                 return this.OriginalHook(actionID);
 
