@@ -174,7 +174,7 @@ internal class PaladinRequiescat : CustomCombo
 
 
 
-internal class PaladinHolySpiritConfiteorCombo : PaladinCombo
+internal class PaladinHolySpiritConfiteorCombo : CustomCombo
 {
     protected internal override CustomComboPreset Preset => CustomComboPreset.PaladinHolySpiritConfiteorFeature;
 
