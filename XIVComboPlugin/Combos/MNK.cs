@@ -131,7 +131,7 @@ internal class MonkCoeurlCombo : CustomCombo
         {
             var gauge = GetJobGauge<MNKGauge>();
 
-            if (gauge.CoeurlFury == 0 && level > MNK.Levels.Demolish)
+            if (gauge.CoeurlFury == 0 && level >= MNK.Levels.Demolish)
                 return MNK.Demolish;
         }
 

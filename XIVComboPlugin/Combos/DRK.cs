@@ -115,9 +115,10 @@ internal class DarkStalwartSoul : CustomCombo
     protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
     {
         if (actionID == DRK.StalwartSoul)
-        {
-            if(lastComboMove != DRK.Unleash || level <= DRK.Levels.StalwartSoul )
-                return DRK.Unleash;
+		{
+			if (lastComboMove == DRK.Unleash && level >= DRK.Levels.StalwartSoul)
+				return DRK.StalwartSoul;
+            return DRK.Unleash;
         }
 
         return actionID;

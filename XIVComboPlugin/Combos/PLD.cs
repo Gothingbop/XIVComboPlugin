@@ -92,34 +92,7 @@ internal static class PLD
     }
 }
 
-internal abstract class PaladinCombo : CustomCombo
-{
-    protected bool HasMp(uint spell)
-    {
-        int cost = 0;
-        switch (spell)
-        {
-            case PLD.Clemency:
-                cost = 2000;
-                break;
-            case PLD.HolySpirit:
-            case PLD.HolyCircle:
-            case PLD.Confiteor:
-            case PLD.BladeOfFaith:
-            case PLD.BladeOfTruth:
-            case PLD.BladeOfValor:
-                cost = 1000;
-                break;
-        }
-
-        if (LocalPlayer?.Level >= PLD.Levels.HolySpirit)
-            cost /= 2;
-
-        return LocalPlayer?.CurrentMp >= cost;
-    }
-}
-
-internal class PaladinRoyalAuthority : PaladinCombo
+internal class PaladinRoyalAuthority : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -143,7 +116,7 @@ internal class PaladinRoyalAuthority : PaladinCombo
     }
 }
 
-internal class PaladinProminence : PaladinCombo
+internal class PaladinProminence : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
@@ -164,7 +137,7 @@ internal class PaladinProminence : PaladinCombo
     }
 }
 
-internal class PaladinRequiescat : PaladinCombo
+internal class PaladinRequiescat : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PldAny;
 
