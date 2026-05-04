@@ -113,4 +113,7 @@ internal class Service
     /// </summary>
     [PluginService]
     internal static IPluginLog PluginLog { get; private set; } = null!;
+    
+    [PluginService]
+    internal static IObjectTable ObjectTable { get; private set; } = null!;
 }

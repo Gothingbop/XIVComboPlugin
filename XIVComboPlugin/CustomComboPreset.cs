@@ -538,8 +538,20 @@ public enum CustomComboPreset
     // ====================================================================================
     #region DOH
 
-    // [CustomComboInfo("Placeholder", "Placeholder.", DOH.JobID)]
-    // DohPlaceholder = 50001,
+    [SectionCombo("DOH")]
+    [IconsCombo([UTL.Blank])]
+    [CustomComboInfo("DOH Touch Combo", "", DOH.JobID)]
+    DOHTouchFeature = 1001,
+    
+    [SectionCombo("DOH")]
+    [IconsCombo([UTL.Blank])]
+    [CustomComboInfo("DOH Intensive Proc", "", DOH.JobID)]
+    DOHIntensiveProc = 1002,
+    
+    [SectionCombo("DOH")]
+    [IconsCombo([UTL.Blank])]
+    [CustomComboInfo("Dummy", "", DOH.JobID)]
+    DOHDummy = 1003,
 
     #endregion
     // ====================================================================================

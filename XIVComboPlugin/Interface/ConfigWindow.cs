@@ -114,7 +114,8 @@ public class ConfigWindow : Window
 						// This is cursed. I'm lazy. Don't judge me. Or do. I don't care. It's imgui anyway.
 						if (!(Service.Configuration.CurrentJobTab is "Adventurer" or "Disciples of the Land" or "Paladin" or "Monk" or "Warrior" or "Dragoon" or "Bard" or "White Mage"
 						or "Black Mage" or "Summoner" or "Scholar" or "Ninja" or "Machinist" or "Dark Knight" or "Astrologian"
-						or "Samurai" or "Red Mage" or "Gunbreaker" or "Dancer" or "Reaper" or "Sage" or "Viper" or "Pictomancer"))
+						or "Samurai" or "Red Mage" or "Gunbreaker" or "Dancer" or "Reaper" or "Sage" or "Viper" or "Pictomancer"
+                        or "Disciples of the Hand"))
                         {
                             Service.Configuration.CurrentJobTab = "Adventurer";
                             Service.Configuration.Save();

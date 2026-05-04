@@ -79,7 +79,7 @@ public sealed class XIVCombo : IDalamudPlugin
 	{
 		if (Service.Configuration.AutoJobChange)
 		{
-			string job = Service.ClientState.LocalPlayer?.ClassJob.RowId != null ? CustomComboInfoAttribute.JobIDToName((byte)Service.ClientState.LocalPlayer?.ClassJob.RowId) : Service.Configuration.CurrentJobTab;
+			string job = Service.ObjectTable.LocalPlayer?.ClassJob.RowId != null ? CustomComboInfoAttribute.JobIDToName((byte)Service.ObjectTable.LocalPlayer?.ClassJob.RowId) : Service.Configuration.CurrentJobTab;
 			if (job == "Disciples of the Hand" || Service.Configuration.CurrentJobTab == "Disciples of the Hand")
 				job = "Paladin";
 			Service.Configuration.CurrentJobTab = job;
@@ -179,7 +179,7 @@ public sealed class XIVCombo : IDalamudPlugin
 
 				if (Service.Configuration.AutoJobChange)
 				{
-					string job = Service.ClientState.LocalPlayer?.ClassJob.RowId != null ? CustomComboInfoAttribute.JobIDToName((byte)Service.ClientState.LocalPlayer?.ClassJob.RowId) : Service.Configuration.CurrentJobTab;
+					string job = Service.ObjectTable.LocalPlayer?.ClassJob.RowId != null ? CustomComboInfoAttribute.JobIDToName((byte)Service.ObjectTable.LocalPlayer?.ClassJob.RowId) : Service.Configuration.CurrentJobTab;
 					if (job == "Disciples of the Hand" || Service.Configuration.CurrentJobTab == "Disciples of the Hand")
 						job = "Paladin";
 					Service.Configuration.CurrentJobTab = job;

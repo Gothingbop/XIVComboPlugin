@@ -5,10 +5,10 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVCombo.Attributes;
-using Status = Dalamud.Game.ClientState.Statuses.Status;
 
 namespace XIVCombo.Combos;
 
@@ -158,7 +158,7 @@ internal abstract partial class CustomCombo
     /// Gets the player or null.
     /// </summary>
     protected static IPlayerCharacter? LocalPlayer
-        => Service.ClientState.LocalPlayer;
+        => Service.ObjectTable.LocalPlayer;
 
     /// <summary>
     /// Gets the current target or null.
@@ -169,7 +169,7 @@ internal abstract partial class CustomCombo
     /// <summary>
     /// Gets the current territory type.
     /// </summary>
-    protected static ushort CurrentTerritory
+    protected static uint CurrentTerritory
         => Service.ClientState.TerritoryType;
 
     /// <summary>
@@ -261,7 +261,7 @@ internal abstract partial class CustomCombo
     /// </summary>
     /// <param name="effectID">Status effect ID.</param>
     /// <returns>Status object or null.</returns>
-    protected static Status? FindEffect(ushort effectID)
+    protected static IStatus? FindEffect(ushort effectID)
         => FindEffect(effectID, LocalPlayer, LocalPlayer?.EntityId);
 
     /// <summary>
@@ -279,7 +279,7 @@ internal abstract partial class CustomCombo
     /// </summary>
     /// <param name="effectID">Status effect ID.</param>
     /// <returns>Status object or null.</returns>
-    protected static Status? FindTargetEffect(ushort effectID)
+    protected static IStatus? FindTargetEffect(ushort effectID)
         => FindEffect(effectID, CurrentTarget, LocalPlayer?.EntityId);
 
     /// <summary>
@@ -297,7 +297,7 @@ internal abstract partial class CustomCombo
     /// </summary>
     /// <param name="effectID">Status effect ID.</param>
     /// <returns>Status object or null.</returns>
-    protected static Status? FindEffectAny(ushort effectID)
+    protected static IStatus? FindEffectAny(ushort effectID)
         => FindEffect(effectID, LocalPlayer, null);
 
     /// <summary>
@@ -315,7 +315,7 @@ internal abstract partial class CustomCombo
     /// </summary>
     /// <param name="effectID">Status effect ID.</param>
     /// <returns>Status object or null.</returns>
-    protected static Status? FindTargetEffectAny(ushort effectID)
+    protected static IStatus? FindTargetEffectAny(ushort effectID)
         => FindEffect(effectID, CurrentTarget, null);
 
     /// <summary>
@@ -325,7 +325,7 @@ internal abstract partial class CustomCombo
     /// <param name="obj">Object to look for effects on.</param>
     /// <param name="sourceID">Source object ID.</param>
     /// <returns>Status object or null.</returns>
-    protected static Status? FindEffect(ushort effectID, IGameObject? obj, uint? sourceID)
+    protected static IStatus? FindEffect(ushort effectID, IGameObject? obj, uint? sourceID)
         => Service.ComboCache.GetStatus(effectID, obj, sourceID);
 
     /// <summary>

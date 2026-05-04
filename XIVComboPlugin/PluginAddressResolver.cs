@@ -21,6 +21,12 @@ internal class PluginAddressResolver : BaseAddressResolver
     /// Gets the address of the member LastComboMove.
     /// </summary>
     public IntPtr LastComboMove => this.ComboTimer + 0x4;
+    
+    /// <summary>
+    /// Gets the address of the member LastComboMove2.
+    /// Used for a different combo set. Crafting actions use this combo set.
+    /// </summary>
+    public IntPtr LastComboMove2 => this.ComboTimer + 0x7C0;
 
     /// <summary>
     /// Gets the address of fpIsIconReplacable.
