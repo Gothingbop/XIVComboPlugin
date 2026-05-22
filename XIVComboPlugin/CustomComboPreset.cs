@@ -237,8 +237,13 @@ public enum CustomComboPreset
     
     [IconsCombo([MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate, MCH.HeatBlast, MCH.BlazingShot])]
     [SectionCombo("My Custom")]
-    [CustomComboInfo("Single Button OGCD Skills", "Replace off global cooldown skills with the skill that has the greatest number of charges.", MCH.JobID)]
-    MachinistOffGGlobalSingleButtonFeature = 3104,
+    [CustomComboInfo("Single-Target OGCD Skills", "Replace off global cooldown skills with the skill that has the greatest number of charges.", MCH.JobID)]
+    MachinistOverheatSingleTargetFeature = 3104,
+    
+    [IconsCombo([MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate, MCH.AutoCrossbow])]
+    [SectionCombo("My Custom")]
+    [CustomComboInfo("Multi-Target OGCD Skills", "Replace off global cooldown skills with the skill that has the greatest number of charges.", MCH.JobID)]
+    MachinistOverheatMultiTargetFeature = 3105,
 
     #endregion
     // ====================================================================================

@@ -173,13 +173,13 @@ internal class MachinistCooldownSkillsCombo : CustomCombo
     }
 }
 
-internal class MachinistOffGGlobalSingleButtonCombo : CustomCombo
+internal class MachinistOverheatSingleTargetCombo : CustomCombo
 {
-    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistOffGGlobalSingleButtonFeature;
+    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistOverheatSingleTargetFeature;
 
     protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
     {
-        HashSet<uint> skills = [MCH.GaussRound, MCH.Ricochet, MCH.DoubleCheck, MCH.Checkmate];
+        HashSet<uint> skills = [MCH.HeatBlast, MCH.BlazingShot];
         if (!skills.Contains(actionId)) return actionId;
 
 
@@ -217,8 +217,57 @@ internal class MachinistOffGGlobalSingleButtonCombo : CustomCombo
 
         var recastDetail = GetRecastGroupInfo(57);
         var recastRemaining = recastDetail.Total - recastDetail.Elapsed;
-        if (recastRemaining < 0.5) return level < MCH.Levels.BlazingShot ? MCH.HeatBlast : MCH.BlazingShot;
+        if (recastRemaining < 0.66) return level < MCH.Levels.BlazingShot ? MCH.HeatBlast : MCH.BlazingShot;
 
         return ogcdActionId;
+    }
+}
+
+
+internal class MachinistOverheatMultiTargetCombo : CustomCombo
+{
+    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistOverheatSingleTargetFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        HashSet<uint> skills = [MCH.AutoCrossbow];
+        if (!skills.Contains(actionId)) return actionId;
+
+
+        uint ogcdActionId;
+        if (level < MCH.Levels.Ricochet)
+        {
+            ogcdActionId = MCH.GaussRound;
+        }
+        else
+        {
+            RecastInfo[] recastInfo;
+            if (level < MCH.Levels.CheckMate)
+            {
+                recastInfo =
+                [
+                    GetRecastInfo(MCH.GaussRound),
+                    GetRecastInfo(MCH.Ricochet)
+                ];
+            }
+            else
+            {
+                recastInfo =
+                [
+                    GetRecastInfo(MCH.DoubleCheck),
+                    GetRecastInfo(MCH.Checkmate)
+                ];
+            }
+
+            Array.Sort(recastInfo, (x, y) => y.Charges.CompareTo(x.Charges));
+            ogcdActionId = recastInfo[0].ActionId;
+        }
+
+        var gauge = GetJobGauge<MCHGauge>();
+        if (!gauge.IsOverheated) return ogcdActionId;
+
+        var recastDetail = GetRecastGroupInfo(57);
+        var recastRemaining = recastDetail.Total - recastDetail.Elapsed;
+        return recastRemaining < 0.66 ? MCH.AutoCrossbow : ogcdActionId;
     }
 }
