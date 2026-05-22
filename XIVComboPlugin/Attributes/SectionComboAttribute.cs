@@ -14,7 +14,7 @@ internal class SectionComboAttribute : Attribute
     /// <param name="section">Presets that should be contained in a specific section.</param>
     internal SectionComboAttribute(string section)
     {
-        this.Section = section;
+        Section = section;
     }
 
     /// <summary>

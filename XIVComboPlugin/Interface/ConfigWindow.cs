@@ -60,8 +60,8 @@ public class ConfigWindow : Window
 	: base($"XIVCombo v{Service.Interface.Manifest.AssemblyVersion}")
 	{
 		this.Plugin = Plugin;
-		this.RespectCloseHotkey = true;
-		this.groupedPresets = Enum
+		RespectCloseHotkey = true;
+		groupedPresets = Enum
 		.GetValues<CustomComboPreset>()
 		.Where(preset => (int)preset > 100 && preset != CustomComboPreset.Disabled)
 		.Select(preset => (Preset: preset, Info: preset.GetAttribute<CustomComboInfoAttribute>()))
@@ -83,19 +83,19 @@ public class ConfigWindow : Window
 			if (parent != null)
 				childCombos[parent.Value].Add(preset);
 		}
-		this.presetChildren = childCombos.ToDictionary(
+		presetChildren = childCombos.ToDictionary(
 		kvp => kvp.Key,
 		kvp => kvp.Value
 		.Select(preset => (Preset: preset, Info: preset.GetAttribute<CustomComboInfoAttribute>()))
 		.OrderBy(tpl => tpl.Info.Order).ToArray());
-		this.SizeCondition = ImGuiCond.FirstUseEver;
-		this.Size = new Vector2(750, 500);
+		SizeCondition = ImGuiCond.FirstUseEver;
+		Size = new Vector2(750, 500);
 		WindowSizeConstraints windowSizeConstraints = new WindowSizeConstraints();
 		if (Service.Configuration.BigComboIcons || Service.Configuration.BigJobIcons)
 			windowSizeConstraints.MinimumSize = new Vector2(900, 700);
 		else
 			windowSizeConstraints.MinimumSize = new Vector2(750, 500);
-		this.SizeConstraints = windowSizeConstraints;
+		SizeConstraints = windowSizeConstraints;
 	}
 
 	/// <inheritdoc/>
@@ -124,13 +124,13 @@ public class ConfigWindow : Window
                         float scale = 1f;
                         if (Service.Configuration.BigJobIcons)
                             scale = 1.5f;
-                        if (ImGui.BeginChild("TabButtons", new System.Numerics.Vector2(36f * scale, 0f), false, ImGuiWindowFlags.NoScrollbar))
+                        if (ImGui.BeginChild("TabButtons", new Vector2(36f * scale, 0f), false, ImGuiWindowFlags.NoScrollbar))
                         {
                             ImGui.SameLine(1f);
 
-                            using (ImRaii.PushStyle(ImGuiStyleVar.FramePadding, new System.Numerics.Vector2(4f, 3f)))
+                            using (ImRaii.PushStyle(ImGuiStyleVar.FramePadding, new Vector2(4f, 3f)))
                             {
-                                if (ImGui.BeginTable("TabButtonsTable", 1, ImGuiTableFlags.None, new System.Numerics.Vector2(36f * scale, 36f * scale), 4f * scale))
+                                if (ImGui.BeginTable("TabButtonsTable", 1, ImGuiTableFlags.None, new Vector2(36f * scale, 36f * scale), 4f * scale))
                                 {
                                     if ((Service.Configuration.CurrentJobTab == "Adventurer"
                                         || Service.Configuration.CurrentJobTab == "Disciples of the Land"
@@ -139,7 +139,7 @@ public class ConfigWindow : Window
                                         Service.Configuration.CurrentJobTab = "Paladin";
                                     }
 
-                                    foreach (var jobName in this.groupedPresets.Keys)
+                                    foreach (var jobName in groupedPresets.Keys)
                                     {
                                         if (jobName is not "Adventurer" and not "Disciples of the Land" and not "Sage")
                                         {
@@ -150,14 +150,14 @@ public class ConfigWindow : Window
 
                                             using (selected ? ImRaii.PushColor(ImGuiCol.Button, ImGuiColors.DalamudGrey2) : ImRaii.PushColor(ImGuiCol.Button, 0))
                                             using (selected ? ImRaii.PushColor(ImGuiCol.Border, ImGuiColors.DalamudGrey3) : ImRaii.PushColor(ImGuiCol.Border, 0))
-                                            using (ImRaii.PushStyle(ImGuiStyleVar.FramePadding, new System.Numerics.Vector2(4f, 3f)))
+                                            using (ImRaii.PushStyle(ImGuiStyleVar.FramePadding, new Vector2(4f, 3f)))
                                             using (ImRaii.PushStyle(ImGuiStyleVar.FrameBorderSize, 0))
                                             {
                                                 ISharedImmediateTexture image = GetJobIcon(CustomComboInfoAttribute.NameToJobID(jobName));
 
                                                 if (image != null)
                                                 {
-                                                    if (ImGui.ImageButton(image.GetWrapOrEmpty().Handle, new System.Numerics.Vector2(28f * scale, 28f * scale)))
+                                                    if (ImGui.ImageButton(image.GetWrapOrEmpty().Handle, new Vector2(28f * scale, 28f * scale)))
                                                     {
                                                         Service.Configuration.CurrentJobTab = jobName;
                                                     }
@@ -192,7 +192,7 @@ public class ConfigWindow : Window
                             #region COMBOS TAB HEADER
                             var jobID = CustomComboInfoAttribute.NameToJobID(Service.Configuration.CurrentJobTab);
                             var image = GetJobIcon(jobID);
-                            ImGui.Image(image.GetWrapOrEmpty().Handle, new System.Numerics.Vector2(36f, 36f));
+                            ImGui.Image(image.GetWrapOrEmpty().Handle, new Vector2(36f, 36f));
                             ImGui.SameLine();
                             using (ImRaii.PushFont(UiBuilder.MonoFont))
                             using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGold))
@@ -208,9 +208,9 @@ public class ConfigWindow : Window
 
 								int i = 1;
 								string previousSection = string.Empty;
-								foreach (var (preset, info) in this.groupedPresets[Service.Configuration.CurrentJobTab])
+								foreach (var (preset, info) in groupedPresets[Service.Configuration.CurrentJobTab])
 								{
-									previousSection = this.DrawPreset(preset, info, previousSection, ref i);
+									previousSection = DrawPreset(preset, info, previousSection, ref i);
 								}
 
 								ImGui.EndChild();
@@ -237,7 +237,7 @@ public class ConfigWindow : Window
                         ImGuiWindowFlags window_flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.ChildWindow;
                         using (ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0, 5)))
                         {
-                            ImGui.BeginChild("ChildL", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X - ImGui.GetScrollX(), 300f), true, window_flags);
+                            ImGui.BeginChild("ChildL", new Vector2(ImGui.GetContentRegionAvail().X - ImGui.GetScrollX(), 300f), true, window_flags);
 
                             using (ImRaii.PushFont(UiBuilder.MonoFont))
                             using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGold))
@@ -347,7 +347,7 @@ public class ConfigWindow : Window
                                     ImGui.PopItemWidth();
 
 
-                                    using (ImRaii.PushColor(ImGuiCol.Text, this.shadedColor))
+                                    using (ImRaii.PushColor(ImGuiCol.Text, shadedColor))
                                     {
 
                                         foreach (var text in info)
@@ -485,7 +485,7 @@ public class ConfigWindow : Window
         {
             if (previousSection != preset.GetAttribute<SectionComboAttribute>()?.Section && previousSection != "child")
             {
-                this.DrawSection(preset, info, ref i);
+                DrawSection(preset, info, ref i);
                 previousSection = preset.GetAttribute<SectionComboAttribute>()?.Section;
             }
         }
@@ -497,7 +497,7 @@ public class ConfigWindow : Window
         {
             if (enabled)
             {
-                this.EnableParentPresets(preset);
+                EnableParentPresets(preset);
                 Service.Configuration.EnabledActions.Add(preset);
                 foreach (var conflict in conflicts)
                 {
@@ -555,21 +555,21 @@ public class ConfigWindow : Window
                 if (isStatus)
                 {
                     ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 4f);
-                    ImGui.Image(icon.GetWrapOrEmpty().Handle, new System.Numerics.Vector2(24f * scale, 32f * scale));
+                    ImGui.Image(icon.GetWrapOrEmpty().Handle, new Vector2(24f * scale, 32f * scale));
                     ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 4f);
                     hoverName = GetStatusName(iconId);
                 }
                 else if (isUTL)
                 {
-                    ImGui.Image(GetIcon(IconsComboAttribute.Blank).GetWrapOrEmpty().Handle, new System.Numerics.Vector2(2f * scale, 24f * scale));
+                    ImGui.Image(GetIcon(IconsComboAttribute.Blank).GetWrapOrEmpty().Handle, new Vector2(2f * scale, 24f * scale));
                     ImGui.SameLine(0, 0);
                     ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3f);
-                    ImGui.Image(icon.GetWrapOrEmpty().Handle, new System.Numerics.Vector2(20f * scale, 20f * scale));
+                    ImGui.Image(icon.GetWrapOrEmpty().Handle, new Vector2(20f * scale, 20f * scale));
                     ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 3f);
                 }
                 else
                 {
-                    ImGui.Image(icon.GetWrapOrEmpty().Handle, new System.Numerics.Vector2(24f*scale, 24f*scale));
+                    ImGui.Image(icon.GetWrapOrEmpty().Handle, new Vector2(24f*scale, 24f*scale));
                     hoverName = GetSkillName(iconId);
                 }
 
@@ -586,7 +586,7 @@ public class ConfigWindow : Window
                 if (isUTL)
                 {
                     ImGui.SameLine(0, 0);
-                    ImGui.Image(GetIcon(IconsComboAttribute.Blank).GetWrapOrEmpty().Handle, new System.Numerics.Vector2(2f * scale, 24f * scale));
+                    ImGui.Image(GetIcon(IconsComboAttribute.Blank).GetWrapOrEmpty().Handle, new Vector2(2f * scale, 24f * scale));
                 }
 
                 it++;
@@ -605,7 +605,7 @@ public class ConfigWindow : Window
 
         ImGui.PopItemWidth();
 
-        using (ImRaii.PushColor(ImGuiCol.Text, this.shadedColor))
+        using (ImRaii.PushColor(ImGuiCol.Text, shadedColor))
         {
         ImGui.TextWrapped($"{info.Description}");
         }
@@ -632,13 +632,13 @@ public class ConfigWindow : Window
         var hideChildren = Service.Configuration.HideChildren;
         if (enabled || !hideChildren)
         {
-            var children = this.presetChildren[preset];
+            var children = presetChildren[preset];
             if (children.Length > 0)
             {
                 ImGui.Indent();
 
                 foreach (var (childPreset, childInfo) in children)
-                    this.DrawPreset(childPreset, childInfo, "child", ref i);
+                    DrawPreset(childPreset, childInfo, "child", ref i);
 
                 ImGui.Unindent();
             }

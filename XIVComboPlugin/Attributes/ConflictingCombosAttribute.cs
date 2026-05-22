@@ -14,7 +14,7 @@ internal class ConflictingCombosAttribute : Attribute
     /// <param name="conflictingPresets">Presets that conflict with the given combo.</param>
     internal ConflictingCombosAttribute(params CustomComboPreset[] conflictingPresets)
     {
-        this.ConflictingPresets = conflictingPresets;
+        ConflictingPresets = conflictingPresets;
     }
 
     /// <summary>

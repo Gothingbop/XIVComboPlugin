@@ -22,9 +22,9 @@ internal abstract partial class CustomCombo
     /// </summary>
     protected CustomCombo()
     {
-        var presetInfo = this.Preset.GetAttribute<CustomComboInfoAttribute>();
-        this.JobID = presetInfo.JobID;
-        this.ClassID = this.JobID switch
+        var presetInfo = Preset.GetAttribute<CustomComboInfoAttribute>();
+        JobID = presetInfo.JobID;
+        ClassID = JobID switch
         {
             ADV.JobID => ADV.ClassID,
             BLM.JobID => BLM.ClassID,
@@ -69,7 +69,7 @@ internal abstract partial class CustomCombo
     {
         newActionID = 0;
 
-        if (!IsEnabled(this.Preset) || !Service.Configuration.EnablePlugin)
+        if (!IsEnabled(Preset) || !Service.Configuration.EnablePlugin)
             return false;
 
         var classJobID = LocalPlayer!.ClassJob.RowId;
@@ -80,11 +80,11 @@ internal abstract partial class CustomCombo
         if (classJobID >= 16 && classJobID <= 18)
             classJobID = DOL.JobID;
 
-        if (this.JobID != ADV.JobID && this.ClassID != ADV.ClassID &&
-            this.JobID != classJobID && this.ClassID != classJobID)
+        if (JobID != ADV.JobID && ClassID != ADV.ClassID &&
+            JobID != classJobID && ClassID != classJobID)
             return false;
 
-        var resultingActionID = this.Invoke(actionID, lastComboMove, comboTime, level);
+        var resultingActionID = Invoke(actionID, lastComboMove, comboTime, level);
 
         if (resultingActionID == 0 || actionID == resultingActionID)
             return false;

@@ -20,13 +20,13 @@ internal class PluginAddressResolver : BaseAddressResolver
     /// <summary>
     /// Gets the address of the member LastComboMove.
     /// </summary>
-    public IntPtr LastComboMove => this.ComboTimer + 0x4;
+    public IntPtr LastComboMove => ComboTimer + 0x4;
     
     /// <summary>
     /// Gets the address of the member LastComboMove2.
     /// Used for a different combo set. Crafting actions use this combo set.
     /// </summary>
-    public IntPtr LastComboMove2 => this.ComboTimer + 0x7C0;
+    public IntPtr LastComboMove2 => ComboTimer + 0x7C0;
 
     /// <summary>
     /// Gets the address of fpIsIconReplacable.
@@ -36,13 +36,13 @@ internal class PluginAddressResolver : BaseAddressResolver
     /// <inheritdoc/>
     protected unsafe override void Setup64Bit(ISigScanner scanner)
     {
-        this.ComboTimer = new IntPtr(&ActionManager.Instance()->Combo.Timer);
+        ComboTimer = new IntPtr(&ActionManager.Instance()->Combo.Timer);
 
-        this.IsActionIdReplaceable = scanner.ScanText("40 53 48 83 EC 20 8B D9 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 85 C0 74 1F");
+        IsActionIdReplaceable = scanner.ScanText("40 53 48 83 EC 20 8B D9 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 85 C0 74 1F");
 
         Service.PluginLog.Verbose("===== X I V C O M B O =====");
-        Service.PluginLog.Verbose($"{nameof(this.IsActionIdReplaceable)} 0x{this.IsActionIdReplaceable:X}");
-        Service.PluginLog.Verbose($"{nameof(this.ComboTimer)}            0x{this.ComboTimer:X}");
-        Service.PluginLog.Verbose($"{nameof(this.LastComboMove)}         0x{this.LastComboMove:X}");
+        Service.PluginLog.Verbose($"{nameof(IsActionIdReplaceable)} 0x{IsActionIdReplaceable:X}");
+        Service.PluginLog.Verbose($"{nameof(ComboTimer)}            0x{ComboTimer:X}");
+        Service.PluginLog.Verbose($"{nameof(LastComboMove)}         0x{LastComboMove:X}");
     }
 }

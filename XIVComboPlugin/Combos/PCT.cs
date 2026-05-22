@@ -129,16 +129,16 @@ internal static class PCT
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
 		{
-			if (actionID == PCT.FireRedST)
+			if (actionID == FireRedST)
 			{
-				if (!HasEffect(PCT.Buffs.SubstractivePalette))
+				if (!HasEffect(Buffs.SubstractivePalette))
 				{
-					return OriginalHook(PCT.FireRedST);
+					return OriginalHook(FireRedST);
 				}
 
-				if (HasEffect(PCT.Buffs.SubstractivePalette))
+				if (HasEffect(Buffs.SubstractivePalette))
 				{
-					return OriginalHook(PCT.BlizzardCyanST);
+					return OriginalHook(BlizzardCyanST);
 				}
 			}
 
@@ -153,16 +153,16 @@ internal static class PCT
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
 
-			if (actionID == PCT.FireRedAoE)
+			if (actionID == FireRedAoE)
 			{
-				if (!HasEffect(PCT.Buffs.SubstractivePalette))
+				if (!HasEffect(Buffs.SubstractivePalette))
 				{
-					return OriginalHook(PCT.FireRedAoE);
+					return OriginalHook(FireRedAoE);
 				}
 
-				if (HasEffect(PCT.Buffs.SubstractivePalette))
+				if (HasEffect(Buffs.SubstractivePalette))
 				{
-					return OriginalHook(PCT.BlizzardCyanAoE);
+					return OriginalHook(BlizzardCyanAoE);
 				}
 			}
 
@@ -177,10 +177,10 @@ internal static class PCT
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == PCT.HolyWhite)
+            if (actionID == HolyWhite)
             {
-                if (HasEffect(PCT.Buffs.MonochromeTones))
-                    return PCT.CometBlack;
+                if (HasEffect(Buffs.MonochromeTones))
+                    return CometBlack;
             }
 
             return actionID;
@@ -195,23 +195,23 @@ internal static class PCT
         {
             var gauge = GetJobGauge<PCTGauge>();
 
-            if (actionID == PCT.CreatureMotif)
+            if (actionID == CreatureMotif)
             {
-                if (IsEnabled(CustomComboPreset.PictomancerCreatureMogCombo) && CanUseAction(OriginalHook(PCT.MogOftheAges)))
+                if (IsEnabled(CustomComboPreset.PictomancerCreatureMogCombo) && CanUseAction(OriginalHook(MogOftheAges)))
                 {
                     if (gauge.MooglePortraitReady || gauge.MadeenPortraitReady)
                     {
-                        if (IsCooldownUsable(PCT.MogOftheAges))
-                            return OriginalHook(PCT.MogOftheAges);
+                        if (IsCooldownUsable(MogOftheAges))
+                            return OriginalHook(MogOftheAges);
                     }
                 }
 
                 if (IsEnabled(CustomComboPreset.PictomancerCreatureMotifCombo))
                 {
-                    if (actionID == PCT.CreatureMotif)
+                    if (actionID == CreatureMotif)
                     {
-                        if (OriginalHook(PCT.LivingMuse) != PCT.LivingMuse)
-                            return OriginalHook(PCT.LivingMuse);
+                        if (OriginalHook(LivingMuse) != LivingMuse)
+                            return OriginalHook(LivingMuse);
                     }
                 }
             }
@@ -228,19 +228,19 @@ internal static class PCT
         {
             var gauge = GetJobGauge<PCTGauge>();
 
-            if (actionID == PCT.WeaponMotif)
+            if (actionID == WeaponMotif)
             {
                 if (IsEnabled(CustomComboPreset.PictomancerWeaponMotifCombo))
                 {
                     if (gauge.WeaponMotifDrawn)
-                        return PCT.StrikingMuse;
+                        return StrikingMuse;
                 }
 
                 if (IsEnabled(CustomComboPreset.PictomancerWeaponHammerCombo))
                 {
-                    if (HasEffect(PCT.Buffs.HammerReady))
+                    if (HasEffect(Buffs.HammerReady))
                     {
-                        return OriginalHook(PCT.HammerStamp);
+                        return OriginalHook(HammerStamp);
                     }
                 }
             }
@@ -257,16 +257,16 @@ internal static class PCT
         {
             var gauge = GetJobGauge<PCTGauge>();
 
-            if (actionID == PCT.LandscapeMotif)
+            if (actionID == LandscapeMotif)
             {
                 if (IsEnabled(CustomComboPreset.PictomancerLandscapeMotifCombo))
                 {
                     if (IsEnabled(CustomComboPreset.PictomancerLandscapePrismCombo) &&
-                        HasEffect(PCT.Buffs.StarPrismReady))
-                        return OriginalHook(PCT.StarPrism);
+                        HasEffect(Buffs.StarPrismReady))
+                        return OriginalHook(StarPrism);
 
                     if (gauge.LandscapeMotifDrawn)
-                        return OriginalHook(PCT.ScenicMuse);
+                        return OriginalHook(ScenicMuse);
                 }
             }
 
@@ -280,10 +280,10 @@ internal static class PCT
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID == PCT.ScenicMuse)
+            if (actionID == ScenicMuse)
             {
-                if (HasEffect(PCT.Buffs.StarPrismReady))
-                    return OriginalHook(PCT.StarPrism);
+                if (HasEffect(Buffs.StarPrismReady))
+                    return OriginalHook(StarPrism);
             }
 
             return actionID;

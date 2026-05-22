@@ -47,7 +47,7 @@ internal class IconsComboAttribute : Attribute
     /// <param name="icon">Icon that should be displayed next to the action preset.</param>
     internal IconsComboAttribute(uint icon)
     {
-        this.Icons = [icon];
+        Icons = [icon];
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ internal class IconsComboAttribute : Attribute
     /// <param name="icons">Array of icon that should be displayed next to the action preset.</param>
     internal IconsComboAttribute(uint[] icons)
     {
-        this.Icons = icons;
+        Icons = icons;
     }
 
     /// <summary>

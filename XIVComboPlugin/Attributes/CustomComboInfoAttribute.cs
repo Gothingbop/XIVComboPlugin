@@ -20,10 +20,10 @@ internal class CustomComboInfoAttribute : Attribute
     /// <param name="order">Display order.</param>
     internal CustomComboInfoAttribute(string fancyName, string description, byte jobID, [CallerLineNumber] int order = 0)
     {
-        this.FancyName = fancyName;
-        this.Description = description;
-        this.JobID = jobID;
-        this.Order = order;
+        FancyName = fancyName;
+        Description = description;
+        JobID = jobID;
+        Order = order;
     }
 
     /// <summary>
@@ -49,12 +49,12 @@ internal class CustomComboInfoAttribute : Attribute
     /// <summary>
     /// Gets the job name.
     /// </summary>
-    public string JobName => JobIDToName(this.JobID);
+    public string JobName => JobIDToName(JobID);
 
     /// <summary>
     /// Gets the role name.
     /// </summary>
-    public string RoleName => JobIDToRole(this.JobID);
+    public string RoleName => JobIDToRole(JobID);
 
     /// <summary>
     /// Gets the job name from a job ID.

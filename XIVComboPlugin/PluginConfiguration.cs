@@ -112,7 +112,7 @@ public class PluginConfiguration : IPluginConfiguration
     /// <param name="preset">Preset to check.</param>
     /// <returns>The boolean representation.</returns>
     public bool IsEnabled(CustomComboPreset preset)
-        => this.EnabledActions.Contains(preset);
+        => EnabledActions.Contains(preset);
 
     /// <summary>
     /// Gets an array of conflicting combo presets.

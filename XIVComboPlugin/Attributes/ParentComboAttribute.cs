@@ -14,7 +14,7 @@ internal class ParentComboAttribute : Attribute
     /// <param name="parentPreset">Presets that depend on the given combo.</param>
     internal ParentComboAttribute(CustomComboPreset parentPreset)
     {
-        this.ParentPreset = parentPreset;
+        ParentPreset = parentPreset;
     }
 
     /// <summary>
