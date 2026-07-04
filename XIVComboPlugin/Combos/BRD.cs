@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 
@@ -116,17 +117,56 @@ internal class BardQuickNock : CustomCombo
 {
     protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BrdAny;
 
-    protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
     {
-        if (actionID == BRD.QuickNock || actionID == BRD.Ladonsbite)
+        if (actionId is not (BRD.QuickNock or BRD.Ladonsbite)) return actionId;
+
+        if (!IsEnabled(CustomComboPreset.BardShadowbiteFeature) || level < BRD.Levels.WideVolley) return actionId;
+
+        if (HasEffect(BRD.Buffs.HawksEye) || HasEffect(BRD.Buffs.Barrage))
+            return OriginalHook(BRD.WideVolley);
+
+        return actionId;
+    }
+}
+
+internal class BardDotCombine : CustomCombo
+{
+    private static HashSet<uint> _actions =
+    [
+        BRD.Windbite,
+        BRD.Stormbite,
+        BRD.VenomousBite,
+        BRD.CausticBite,
+        BRD.IronJaws
+    ];
+
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BardDotCombineFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (!_actions.Contains(actionId)) return actionId;
+
+        if (level < BRD.Levels.BiteUpgrade)
         {
-            if (IsEnabled(CustomComboPreset.BardShadowbiteFeature) && level >= BRD.Levels.WideVolley)
-            {
-                if (HasEffect(BRD.Buffs.HawksEye) || HasEffect(BRD.Buffs.Barrage))
-                    return OriginalHook(BRD.WideVolley);
-            }
+            if (level >= BRD.Levels.Windbite && !TargetHasEffect(BRD.Debuffs.Windbite))
+                return OriginalHook(BRD.Windbite);
+
+            if (!TargetHasEffect(BRD.Debuffs.VenomousBite))
+                return OriginalHook(BRD.VenomousBite);
+        }
+        else
+        {
+            if (!TargetHasEffect(BRD.Debuffs.Stormbite))
+                return OriginalHook(BRD.Stormbite);
+
+            if (!TargetHasEffect(BRD.Debuffs.CausticBite))
+                return OriginalHook(BRD.CausticBite);
         }
 
-        return actionID;
+        if (level >= BRD.Levels.IronJaws)
+            return OriginalHook(BRD.IronJaws);
+
+        return OriginalHook(BRD.Windbite);
     }
 }

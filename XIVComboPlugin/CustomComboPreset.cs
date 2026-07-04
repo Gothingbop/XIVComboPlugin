@@ -119,6 +119,11 @@ public enum CustomComboPreset
     [SectionCombo("Single Target")]
     [CustomComboInfo("Heavy Shot into Straight Shot", "Replace Heavy Shot with Straight Shot/Refulgent Arrow when available.", BRD.JobID)]
     BardStraightShotUpgradeFeature = 2302,
+    
+    [IconsCombo([BRD.Windbite, BRD.VenomousBite, BRD.IronJaws])]
+    [SectionCombo("Single Target")]
+    [CustomComboInfo("Single Button DOT", "Combine DOT skills into a single button.", BRD.JobID)]
+    BardDotCombineFeature = 2303,
 
     [IconsCombo([BRD.QuickNock, UTL.ArrowLeft, BRD.WideVolley, UTL.Blank, BRD.Buffs.HawksEye, UTL.Checkmark])]
     [SectionCombo("Area of Effect")]
