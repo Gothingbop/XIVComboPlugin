@@ -226,7 +226,7 @@ internal class MachinistOverheatSingleTargetCombo : CustomCombo
 
 internal class MachinistOverheatMultiTargetCombo : CustomCombo
 {
-    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistOverheatSingleTargetFeature;
+    protected internal override CustomComboPreset Preset => CustomComboPreset.MachinistOverheatMultiTargetFeature;
 
     protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
     {
