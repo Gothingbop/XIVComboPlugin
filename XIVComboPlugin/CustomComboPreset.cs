@@ -129,6 +129,11 @@ public enum CustomComboPreset
     [SectionCombo("Area of Effect")]
     [CustomComboInfo("Quick Nock into Wide Volley/Shadowbite", "Replace Quick Nock with Wide Volley/Shadowbite when available.", BRD.JobID)]
     BardShadowbiteFeature = 2305,
+    
+    [IconsCombo([BRD.HeartbreakShot, BRD.EmpyrealArrow])]
+    [SectionCombo("Single Target")]
+    [CustomComboInfo("OGCD Combine", "Combine OGCD skills into a single button.", BRD.JobID)]
+    BardOgcdCombineFeature = 2306,
 
     #endregion
     // ====================================================================================

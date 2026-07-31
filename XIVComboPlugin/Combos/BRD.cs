@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using Lumina.Extensions;
 
 namespace XIVCombo.Combos;
 
@@ -168,5 +169,44 @@ internal class BardDotCombine : CustomCombo
             return OriginalHook(BRD.IronJaws);
 
         return OriginalHook(BRD.Windbite);
+    }
+}
+
+internal class BardOgcdCombine : CustomCombo
+{
+    private static HashSet<uint> _actions =
+    [
+        BRD.Bloodletter,
+        BRD.HeartbreakShot,
+        BRD.EmpyrealArrow,
+        BRD.Sidewinder,
+    ];
+
+    protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BardOgcdCombineFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (!_actions.Contains(actionId)) return actionId;
+        
+        var gauge = Service.JobGauges.Get<BRDGauge>();
+        
+        if (gauge.Song is Song.WanderersMinuet &&
+            (gauge.Repertoire >= 3 || gauge is { Repertoire: >= 1, SongTimer: < 5000 }))
+            return BRD.PitchPerfect;
+        
+        var recastInfo = new List<RecastInfo>();
+
+        if (level >= BRD.Levels.Bloodletter)
+            recastInfo.Add(GetRecastInfo(BRD.Bloodletter));
+
+        if (level >= BRD.Levels.EmpyrealArrow)
+            recastInfo.Add(GetRecastInfo(BRD.EmpyrealArrow));
+
+        if (level >= BRD.Levels.Sidewinder)
+            recastInfo.Add(GetRecastInfo(BRD.Sidewinder));
+
+        recastInfo.Sort((x, y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
+
+        return recastInfo.FirstOrNull()?.ActionId ?? actionId;
     }
 }
