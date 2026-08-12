@@ -134,6 +134,11 @@ public enum CustomComboPreset
     [SectionCombo("Single Target")]
     [CustomComboInfo("OGCD Combine", "Combine OGCD skills into a single button.", BRD.JobID)]
     BardOgcdCombineFeature = 2306,
+    
+    [IconsCombo([BRD.RainOfDeath, BRD.EmpyrealArrow])]
+    [SectionCombo("Area of Effect")]
+    [CustomComboInfo("OGCD Combine AOE", "Combine OGCD skills into a single button.", BRD.JobID)]
+    BardAoeOgcdCombineFeature = 2307,
 
     #endregion
     // ====================================================================================
@@ -321,6 +326,11 @@ public enum CustomComboPreset
     [SectionCombo("My Custom")]
     [CustomComboInfo("Holy Spirit/Circle Confiteor", "Replace Holy Spirit/Circle with Confiteor and combo chain when available.", PLD.JobID)]
     PaladinHolySpiritConfiteorFeature = 1906,
+    
+    [IconsCombo([PLD.CircleOfScorn, PLD.Expiacion, PLD.SpiritsWithin])]
+    [SectionCombo("My Custom")]
+    [CustomComboInfo("OGCD Combine", "Combine Circle of Scorn and Expiacion/Spirits Within", PLD.JobID)]
+    PaladinOgcdCombineFeature = 1907,
 
     #endregion
     // ====================================================================================
