@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Lumina.Extensions;
+
 namespace XIVCombo.Combos;
 
 internal static class PLD
@@ -195,4 +198,40 @@ internal class PaladinHolySpiritConfiteorCombo : CustomCombo
 
         return actionId;
     }
+}
+
+internal class PaladinOgcdCombineCombo : CustomCombo
+{
+    private static readonly HashSet<uint> ActionIds =
+    [
+        PLD.CircleOfScorn, 
+        PLD.Expiacion, 
+        PLD.SpiritsWithin
+    ];
+    
+    protected internal override CustomComboPreset Preset => CustomComboPreset.PaladinOgcdCombineFeature;
+
+    protected override uint Invoke(uint actionId, uint lastComboMove, float comboTime, byte level)
+    {
+        if (!ActionIds.Contains(actionId)) return actionId;
+        
+        var recastInfo = new List<RecastInfo>();
+        
+        if (level >= PLD.Levels.CircleOfScorn)
+            recastInfo.Add(GetRecastInfo(PLD.CircleOfScorn));
+
+        if (level >= PLD.Levels.Expiacion)
+        {
+            recastInfo.Add(GetRecastInfo(PLD.Expiacion));
+        }
+        else if (level >= PLD.Levels.SpiritsWithin)
+        {
+            recastInfo.Add(GetRecastInfo(PLD.SpiritsWithin));
+        }
+        
+        recastInfo.Sort((x, y) => x.RecastRemaining.CompareTo(y.RecastRemaining));
+
+        return recastInfo.FirstOrNull()?.ActionId ?? actionId;
+    }
+    
 }
